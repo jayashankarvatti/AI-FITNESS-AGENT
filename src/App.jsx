@@ -2,10 +2,14 @@ import { useState, useRef, useEffect } from 'react'
 import Header from './components/Header'
 import ChatArea from './components/ChatArea'
 import ChatInput from './components/ChatInput'
+import LandingPage from './components/LandingPage'
 
 const WEBHOOK_URL = "https://hook.eu1.make.com/0dpy57gnnzcro9m0gk1r4b641jdc7w9y"
 
 export default function App() {
+  const [view, setView] = useState('landing') // 'landing' | 'chat'
+  const [chatVisible, setChatVisible] = useState(false)
+
   const [messages, setMessages] = useState([
     {
       id: 1,
@@ -25,6 +29,11 @@ export default function App() {
     scrollToBottom()
   }, [messages, isTyping])
 
+  const handleOpenChat = () => {
+    setView('chat')
+    setTimeout(() => setChatVisible(true), 20)
+  }
+
   const handleSend = async (text) => {
     if (!text.trim() || isTyping) return
 
@@ -39,21 +48,14 @@ export default function App() {
     setIsTyping(true)
 
     try {
-      const response = await fetch("https://hook.eu1.make.com/0dpy57gnnzcro9m0gk1r4b641jdc7w9y", {
+      const response = await fetch(WEBHOOK_URL, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          message: userMessage,
-        }),
-      });
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: text.trim() }),
+      })
 
-      const data = await response.text();
-
-      console.log(data);
-
-
+      const data = await response.text()
+      console.log(data)
 
       const aiMessage = {
         id: Date.now() + 1,
@@ -64,20 +66,28 @@ export default function App() {
       setMessages((prev) => [...prev, aiMessage])
     } catch (error) {
       console.error("Error communicating with AI:", error)
-      const errorMessage = {
-        id: Date.now() + 1,
-        text: "Sorry, I'm having trouble connecting right now. Please try again later.",
-        sender: 'ai',
-        timestamp: new Date(),
-      }
-      setMessages((prev) => [...prev, errorMessage])
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: Date.now() + 1,
+          text: "Sorry, I'm having trouble connecting right now. Please try again later.",
+          sender: 'ai',
+          timestamp: new Date(),
+        },
+      ])
     } finally {
       setIsTyping(false)
     }
   }
 
+  // Landing page
+  if (view === 'landing') {
+    return <LandingPage onOpen={handleOpenChat} />
+  }
+
+  // Chat interface with entrance animation
   return (
-    <div className="flex flex-col h-full bg-dark-900">
+    <div className={`flex flex-col h-full bg-dark-900 ${chatVisible ? 'animate-chat-open' : 'opacity-0'}`}>
       <Header />
       <div className="flex-1 flex flex-col items-center min-h-0 w-full">
         <div className="flex flex-col flex-1 w-full max-w-2xl min-h-0">
