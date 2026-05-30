@@ -1,57 +1,104 @@
 export default function Header({ assessmentMode, assessmentStep, totalSteps }) {
   return (
-    <header className="flex items-center gap-3.5 px-5 py-5 border-b border-white/[0.06] bg-dark-800/80 backdrop-blur-md shrink-0 mb-2">
+    <header className="app-header">
+
       {/* Icon */}
-      <div className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-accent-500 to-accent-400 animate-glow-pulse">
-        <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+      <div
+        className="animate-glow-pulse"
+        style={{
+          flexShrink: 0,
+          width: 38,
+          height: 38,
+          borderRadius: 10,
+          background: 'linear-gradient(135deg, var(--color-accent-500), var(--color-accent-400))',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <svg style={{ width: 18, height: 18, color: '#fff' }} fill="none" viewBox="0 0 24 24"
+          stroke="currentColor" strokeWidth={2}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
         </svg>
       </div>
 
       {/* Title & tagline */}
-      <div className="min-w-0">
-        <h1 className="text-lg font-semibold leading-tight text-text-primary tracking-tight">
-          FitAI Assistant
-        </h1>
-        <p className="text-xs text-text-muted leading-snug mt-0.5">
-          Your personal AI-powered fitness coach
-        </p>
+      <div className="app-header__title-group">
+        <h1 className="app-header__title">FitAI Assistant</h1>
+        <p className="app-header__sub">Your personal AI-powered fitness coach</p>
       </div>
 
       {/* Right side */}
-      <div className="ml-auto flex items-center gap-3">
+      <div className="app-header__right">
 
-        {/* Assessment Mode badge */}
+        {/* Assessment badge */}
         {assessmentMode && (
-          <div className="animate-assessment-badge flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-500/15 border border-amber-400/30">
-            {/* Step progress dots */}
-            <div className="flex items-center gap-1">
+          <div
+            className="animate-assessment-badge"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 7,
+              padding: '5px 10px',
+              borderRadius: 999,
+              background: 'rgba(245,158,11,0.12)',
+              border: '1px solid rgba(251,191,36,0.3)',
+            }}
+          >
+            {/* Step dots */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
               {Array.from({ length: totalSteps }).map((_, i) => (
                 <span
                   key={i}
-                  className={`inline-block rounded-full transition-all duration-300 ${
-                    i < assessmentStep
-                      ? 'w-1.5 h-1.5 bg-amber-400'
-                      : i === assessmentStep
-                      ? 'w-2 h-2 bg-amber-300 shadow-[0_0_6px_rgba(251,191,36,0.8)]'
-                      : 'w-1.5 h-1.5 bg-white/15'
-                  }`}
+                  style={{
+                    display: 'inline-block',
+                    borderRadius: '50%',
+                    transition: 'all 0.3s',
+                    width:  i === assessmentStep ? 8 : 6,
+                    height: i === assessmentStep ? 8 : 6,
+                    background:
+                      i < assessmentStep
+                        ? '#fbbf24'
+                        : i === assessmentStep
+                        ? '#fcd34d'
+                        : 'rgba(255,255,255,0.15)',
+                    boxShadow: i === assessmentStep ? '0 0 6px rgba(251,191,36,0.8)' : 'none',
+                  }}
                 />
               ))}
             </div>
-            <span className="text-[10px] font-semibold text-amber-300 tracking-wide uppercase whitespace-nowrap">
-              Assessment {assessmentStep + 1}/{totalSteps}
+            <span className="assessment-badge-label" style={{
+              fontSize: 10,
+              fontWeight: 600,
+              color: '#fcd34d',
+              letterSpacing: '0.05em',
+              textTransform: 'uppercase',
+              whiteSpace: 'nowrap',
+            }}>
+              {assessmentStep + 1}/{totalSteps}
             </span>
           </div>
         )}
 
-        {/* Status dot */}
-        <div className="flex items-center gap-1.5">
-          <span className="relative flex h-2.5 w-2.5">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-50"></span>
-            <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-500"></span>
+        {/* Online status */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 5, flexShrink: 0 }}>
+          <span style={{ position: 'relative', display: 'flex', width: 10, height: 10 }}>
+            <span className="animate-ping" style={{
+              position: 'absolute', inset: 0,
+              borderRadius: '50%', background: '#34d399', opacity: 0.5,
+              animation: 'ping 1s cubic-bezier(0,0,0.2,1) infinite',
+            }} />
+            <span style={{
+              position: 'relative', width: 10, height: 10,
+              borderRadius: '50%', background: '#10b981', display: 'inline-flex',
+            }} />
           </span>
-          <span className="text-xs text-emerald-400 font-medium hidden sm:inline">Online</span>
+          <span style={{
+            fontSize: '0.75rem', color: '#34d399', fontWeight: 500,
+            display: 'none',
+          }}
+            className="sm-inline"
+          >Online</span>
         </div>
 
       </div>

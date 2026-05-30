@@ -1,0 +1,337 @@
+  /* ============================================================
+   *  CHAT LAYOUT — the centred column that wraps everything
+   * ============================================================ */
+  .chat-column {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 0%;
+    min-height: 0;
+    width: 100%;
+    /* Mobile — no extra wrapper needed, full width with padding inside */
+  }
+
+  @media (min-width: 768px) {
+    .chat-column {
+      max-width: 860px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .chat-column {
+      max-width: 1000px;
+    }
+  }
+
+  /* ============================================================
+   *  CHAT AREA — scrollable message list
+   * ============================================================ */
+  .chat-area {
+    flex: 1 1 0%;
+    overflow-y: auto;
+    /* Comfortable breathing space on every screen */
+    padding: 20px 16px 8px;
+  }
+
+  @media (min-width: 640px) {
+    .chat-area {
+      padding: 24px 24px 8px;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .chat-area {
+      padding: 28px 28px 8px;
+    }
+  }
+
+  /* ============================================================
+   *  MESSAGE ROW
+   * ============================================================ */
+  .msg-row {
+    display: flex;
+    margin-bottom: 12px;
+    gap: 10px;
+    /* Prevent any child from bleeding past the row */
+    min-width: 0;
+  }
+
+  .msg-row--user  { justify-content: flex-end; }
+  .msg-row--ai    { justify-content: flex-start; }
+
+  /* ============================================================
+   *  AVATAR (shared for user & ai)
+   * ============================================================ */
+  .msg-avatar {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* push avatar to the top of the bubble */
+    align-self: flex-start;
+    margin-top: 2px;
+  }
+
+  /* ============================================================
+   *  BUBBLE COLUMN (bubble + timestamp stacked)
+   * ============================================================ */
+  .msg-col {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    /* max 78% of whatever the row is wide */
+    max-width: 78%;
+  }
+
+  @media (min-width: 640px) {
+    .msg-col { max-width: 75%; }
+  }
+
+  /* ============================================================
+   *  BUBBLE ITSELF
+   * ============================================================ */
+  .msg-bubble {
+    padding: 10px 14px;
+    font-size: 0.875rem;   /* 14 px */
+    line-height: 1.6;
+    /* Force text to wrap, never overflow */
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+  }
+
+  .msg-bubble--ai {
+    background: var(--color-dark-600);
+    color: var(--color-text-primary);
+    border-radius: 18px 18px 18px 4px;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+  }
+
+  .msg-bubble--user {
+    background: linear-gradient(135deg, var(--color-accent-500), var(--color-accent-400));
+    color: #fff;
+    border-radius: 18px 18px 4px 18px;
+    box-shadow: 0 4px 14px rgba(108, 99, 255, 0.25);
+    /* Align bubble to the right edge of its column */
+    align-self: flex-end;
+  }
+
+  /* ============================================================
+   *  TIMESTAMP
+   * ============================================================ */
+  .msg-time {
+    font-size: 10px;
+    color: var(--color-text-muted);
+    margin-top: 3px;
+    padding: 0 2px;
+    /* never hidden */
+    display: block;
+  }
+
+  .msg-time--user { text-align: right; }
+  .msg-time--ai   { text-align: left; }
+
+  /* ============================================================
+   *  HEADER — responsive padding
+   * ============================================================ */
+  .app-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(18, 18, 26, 0.85);
+    backdrop-filter: blur(12px);
+    flex-shrink: 0;
+    /* so the badge doesn't cause line-break on small phones */
+    flex-wrap: nowrap;
+    min-width: 0;
+  }
+
+  @media (min-width: 640px) {
+    .app-header { padding: 16px 24px; }
+  }
+
+  @media (min-width: 768px) {
+    .app-header { padding: 18px 28px; }
+  }
+
+  .app-header__title-group {
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  .app-header__title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  @media (min-width: 400px) {
+    .app-header__title { font-size: 1.0625rem; }
+  }
+
+  .app-header__sub {
+    font-size: 0.6875rem;
+    color: var(--color-text-muted);
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .app-header__right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+
+  /* Assessment badge — hide label on very small screens, show dots only */
+  .assessment-badge-label {
+    display: none;
+  }
+
+  @media (min-width: 380px) {
+    .assessment-badge-label { display: inline; }
+  }
+
+  /* ============================================================
+   *  INPUT FOOTER
+   * ============================================================ */
+  .chat-footer {
+    flex-shrink: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(18, 18, 26, 0.85);
+    backdrop-filter: blur(12px);
+    padding: 10px 16px 10px;
+  }
+
+  @media (min-width: 640px) {
+    .chat-footer { padding: 12px 24px 12px; }
+  }
+
+  @media (min-width: 768px) {
+    .chat-footer { padding: 14px 28px 12px; }
+  }
+
+  .chat-footer__form {
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+  }
+
+  .chat-footer__textarea {
+    flex: 1 1 0%;
+    resize: none;
+    border-radius: 14px;
+    font-size: 0.875rem;
+    color: var(--color-text-primary);
+    background: var(--color-dark-700);
+    padding: 11px 14px;
+    min-height: 46px;
+    max-height: 128px;
+    overflow-y: auto;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    font-family: inherit;
+    line-height: 1.5;
+    /* prevent overflow on mobile */
+    width: 0; /* flex handles actual width */
+  }
+
+  .chat-footer__textarea--normal {
+    border: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .chat-footer__textarea--normal:focus {
+    border-color: rgba(108, 99, 255, 0.5);
+    box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.15);
+  }
+
+  .chat-footer__textarea--assessment {
+    border: 1px solid rgba(251, 191, 36, 0.3);
+  }
+
+  .chat-footer__textarea--assessment:focus {
+    border-color: rgba(251, 191, 36, 0.5);
+    box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.12);
+  }
+
+  .chat-footer__textarea::placeholder {
+    color: var(--color-text-muted);
+  }
+
+  .chat-footer__textarea:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .chat-footer__send {
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.15s, opacity 0.2s, box-shadow 0.2s;
+    outline: none;
+  }
+
+  .chat-footer__send:active  { transform: scale(0.93); }
+  .chat-footer__send:disabled { opacity: 0.28; cursor: not-allowed; }
+
+  .chat-footer__send--normal {
+    background: linear-gradient(135deg, var(--color-accent-500), var(--color-accent-400));
+    box-shadow: 0 4px 12px rgba(108, 99, 255, 0.3);
+  }
+
+  .chat-footer__send--normal:hover:not(:disabled) {
+    box-shadow: 0 4px 18px rgba(108, 99, 255, 0.5);
+  }
+
+  .chat-footer__send--assessment {
+    background: linear-gradient(135deg, #f59e0b, #fbbf24);
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+  }
+
+  .chat-footer__send--assessment:hover:not(:disabled) {
+    box-shadow: 0 4px 18px rgba(245, 158, 11, 0.5);
+  }
+
+  .chat-footer__hint {
+    font-size: 0.625rem;   /* 10 px */
+    color: rgba(107, 114, 128, 0.6);
+    text-align: center;
+    margin-top: 6px;
+  }
+
+  /* Assessment hint bar */
+  .assessment-hint-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    padding: 8px 12px;
+    border-radius: 10px;
+    background: rgba(245, 158, 11, 0.08);
+    border: 1px solid rgba(251, 191, 36, 0.2);
+  }
+
+  .assessment-hint-bar p {
+    font-size: 0.6875rem;
+    color: rgba(252, 211, 77, 0.9);
+    line-height: 1.4;
+  }

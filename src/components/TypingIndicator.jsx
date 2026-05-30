@@ -1,22 +1,27 @@
 export default function TypingIndicator() {
   return (
-    <div className="flex justify-start mb-3 animate-message-in">
+    <div className="msg-row msg-row--ai animate-message-in">
       {/* AI avatar */}
-      <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-accent-500 to-accent-400 flex items-center justify-center mr-2.5 mt-1">
-        <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+      <div
+        className="msg-avatar"
+        style={{ background: 'linear-gradient(135deg, var(--color-accent-500), var(--color-accent-400))' }}
+      >
+        <svg
+          style={{ width: 16, height: 16, color: '#fff' }}
+          fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
+        >
           <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
         </svg>
       </div>
 
-      <div className="bg-dark-600 rounded-2xl rounded-bl-md border border-white/[0.04] px-5 py-3.5">
-        <div className="flex items-center gap-2">
-          <div className="flex gap-1">
-            <span className="typing-dot w-2 h-2 rounded-full bg-accent-400 inline-block"></span>
-            <span className="typing-dot w-2 h-2 rounded-full bg-accent-400 inline-block"></span>
-            <span className="typing-dot w-2 h-2 rounded-full bg-accent-400 inline-block"></span>
-          </div>
-          <span className="text-xs text-text-muted ml-1">AI is thinking...</span>
+      {/* Typing bubble */}
+      <div className="msg-bubble msg-bubble--ai" style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+        <div style={{ display: 'flex', gap: 4 }}>
+          <span className="typing-dot" style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--color-accent-400)', display: 'inline-block' }} />
+          <span className="typing-dot" style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--color-accent-400)', display: 'inline-block' }} />
+          <span className="typing-dot" style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--color-accent-400)', display: 'inline-block' }} />
         </div>
+        <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginLeft: 4 }}>AI is thinking…</span>
       </div>
     </div>
   )

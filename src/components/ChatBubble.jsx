@@ -7,48 +7,48 @@ export default function ChatBubble({ message }) {
   })
 
   return (
-    <div
-      className={`flex animate-message-in ${isUser ? 'justify-end' : 'justify-start'} mb-3`}
-    >
-      {/* AI avatar */}
+    <div className={`msg-row animate-message-in ${isUser ? 'msg-row--user' : 'msg-row--ai'}`}>
+
+      {/* AI avatar — left side */}
       {!isUser && (
-        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-accent-500 to-accent-400 flex items-center justify-center mr-2.5 mt-1">
-          <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <div
+          className="msg-avatar"
+          style={{ background: 'linear-gradient(135deg, var(--color-accent-500), var(--color-accent-400))' }}
+        >
+          <svg
+            style={{ width: 16, height: 16, color: '#fff' }}
+            fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
+          >
             <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
           </svg>
         </div>
       )}
 
-      <div className={`max-w-[85%] ${isUser ? 'order-1' : ''}`}>
-        {/* Bubble */}
-        <div
-          className={`
-            px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap break-words
-            ${
-              isUser
-                ? 'bg-gradient-to-br from-accent-500 to-accent-400 text-white rounded-2xl rounded-br-md shadow-lg shadow-accent-500/20'
-                : 'bg-dark-600 text-text-primary rounded-2xl rounded-bl-md border border-white/[0.04]'
-            }
-          `}
-        >
+      {/* Bubble + timestamp column */}
+      <div className="msg-col">
+        <div className={`msg-bubble ${isUser ? 'msg-bubble--user' : 'msg-bubble--ai'}`}>
           {message.text}
         </div>
-
-        {/* Timestamp */}
-        <p
-          className={`text-[10px] text-text-muted mt-1 px-1 ${
-            isUser ? 'text-right' : 'text-left'
-          }`}
-        >
+        <p className={`msg-time ${isUser ? 'msg-time--user' : 'msg-time--ai'}`}>
           {time}
         </p>
       </div>
 
-      {/* User avatar */}
+      {/* User avatar — right side */}
       {isUser && (
-        <div className="flex-shrink-0 w-8 h-8 rounded-full bg-dark-500 border border-white/10 flex items-center justify-center ml-2.5 mt-1">
-          <svg className="w-4 h-4 text-text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+        <div
+          className="msg-avatar"
+          style={{
+            background: 'var(--color-dark-500)',
+            border: '1px solid rgba(255,255,255,0.1)',
+          }}
+        >
+          <svg
+            style={{ width: 16, height: 16, color: 'var(--color-text-secondary)' }}
+            fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
+          >
+            <path strokeLinecap="round" strokeLinejoin="round"
+              d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
           </svg>
         </div>
       )}

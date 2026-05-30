@@ -3,8 +3,8 @@ import TypingIndicator from './TypingIndicator'
 
 export default function ChatArea({ messages, isTyping, chatEndRef }) {
   return (
-    <main className="flex-1 overflow-y-auto px-5 py-6" id="chat-area">
-      <div className="w-full space-y-1">
+    <main className="chat-area" id="chat-area">
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
         {messages.map((msg) => (
           <ChatBubble key={msg.id} message={msg} />
         ))}

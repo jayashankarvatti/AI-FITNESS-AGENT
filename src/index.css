@@ -180,3 +180,19 @@ body {
 .animate-assessment-hint {
   animation: assessment-hint-in 0.3s ease-out forwards;
 }
+
+/* Online-dot ping animation (used in Header) */
+@keyframes ping {
+  75%, 100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+.animate-ping {
+  animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+/* Show "Online" label on screens ≥ 640 px */
+@media (min-width: 640px) {
+  .sm-inline { display: inline !important; }
+}

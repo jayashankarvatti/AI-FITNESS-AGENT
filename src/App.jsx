@@ -52,19 +52,19 @@ const ASSESSMENT_STEPS = [
   {
     key: 'activityLevel',
     question:
-      '🏃 How active are you currently?\n\n• **Sedentary** – little or no exercise\n• **Lightly Active** – light exercise 1–3 days/week\n• **Moderately Active** – moderate exercise 3–5 days/week\n• **Very Active** – hard exercise 6–7 days/week\n• **Extremely Active** – very hard exercise & physical job',
+      '🏃 How active are you currently?\n\n• Sedentary – little or no exercise\n• Lightly Active – light exercise 1–3 days/week\n• Moderately Active – moderate exercise 3–5 days/week\n• Very Active – hard exercise 6–7 days/week\n• Extremely Active – very hard exercise & physical job',
     placeholder: 'e.g. Sedentary, Lightly Active, Moderately Active…',
   },
   {
     key: 'fitnessExperience',
     question:
-      '💪 What is your fitness experience level?\n\n• **Beginner** – just starting out\n• **Intermediate** – training for 6+ months\n• **Advanced** – training for 2+ years',
+      '💪 What is your fitness experience level?\n\n• Beginner – just starting out\n• Intermediate – training for 6+ months\n• Advanced – training for 2+ years',
     placeholder: 'e.g. Beginner, Intermediate, Advanced',
   },
   {
     key: 'dietaryPreference',
     question:
-      '🥗 What is your dietary preference?\n\n• **Vegetarian**\n• **Non-Vegetarian**\n• **Vegan**\n• **Eggetarian**\n• **No preference**',
+      '🥗 What is your dietary preference?\n\n• Vegetarian\n• Non-Vegetarian\n• Vegan\n• Eggetarian\n• No preference',
     placeholder: 'e.g. Vegetarian, Non-Vegetarian, Vegan…',
   },
 ]
@@ -108,7 +108,7 @@ export default function App() {
   // Assessment Mode state
   const [assessmentMode, setAssessmentMode] = useState(false)
   const [assessmentGoal, setAssessmentGoal] = useState('')
-  const [assessmentStep, setAssessmentStep] = useState(0) // index into ASSESSMENT_STEPS
+  const [assessmentStep, setAssessmentStep] = useState(0)
   const [assessmentAnswers, setAssessmentAnswers] = useState({})
 
   const chatEndRef = useRef(null)
@@ -126,9 +126,7 @@ export default function App() {
     setTimeout(() => setChatVisible(true), 20)
   }
 
-  // -------------------------------------------------------------------------
   // Add an AI message to the chat
-  // -------------------------------------------------------------------------
   const addAiMessage = (text) => {
     setMessages((prev) => [
       ...prev,
@@ -136,9 +134,7 @@ export default function App() {
     ])
   }
 
-  // -------------------------------------------------------------------------
   // Call the Make.com webhook and display the response
-  // -------------------------------------------------------------------------
   const callWebhook = async (messageText) => {
     setIsTyping(true)
     try {
@@ -157,13 +153,10 @@ export default function App() {
     }
   }
 
-  // -------------------------------------------------------------------------
   // Main send handler
-  // -------------------------------------------------------------------------
   const handleSend = async (text) => {
     if (!text.trim() || isTyping) return
 
-    // Always add the user's message first
     setMessages((prev) => [
       ...prev,
       { id: Date.now(), text: text.trim(), sender: 'user', timestamp: new Date() },
@@ -178,20 +171,16 @@ export default function App() {
       const nextStep = assessmentStep + 1
 
       if (nextStep < ASSESSMENT_STEPS.length) {
-        // Ask next question
         setAssessmentStep(nextStep)
         const nextQ = ASSESSMENT_STEPS[nextStep]
-        // Small delay so the user sees a natural typing pause
         setTimeout(() => addAiMessage(nextQ.question), 400)
       } else {
-        // All answers collected — build structured prompt & send to webhook
         setAssessmentMode(false)
         setAssessmentStep(0)
         setAssessmentAnswers({})
 
         const structuredPrompt = buildStructuredPrompt(assessmentGoal, updatedAnswers)
 
-        // Confirm to the user we're generating the plan
         setTimeout(() => {
           addAiMessage(
             "✅ Perfect! I've collected all the information I need. Generating your personalized fitness plan now — this may take a moment… 🚀"
@@ -202,14 +191,13 @@ export default function App() {
       return
     }
 
-    // --- NORMAL MODE: check if this is a goal-oriented request ---
+    // --- NORMAL MODE: check if goal-oriented ---
     if (isGoalRequest(text.trim())) {
       setAssessmentGoal(text.trim())
       setAssessmentMode(true)
       setAssessmentStep(0)
       setAssessmentAnswers({})
 
-      // Kick off assessment with the first question
       setTimeout(() => {
         addAiMessage(
           `🎯 Great goal! To build a personalized plan just for you, I need to ask a few quick questions.\n\nLet's start — ${ASSESSMENT_STEPS[0].question}`
@@ -218,26 +206,32 @@ export default function App() {
       return
     }
 
-    // --- NORMAL MODE: general fitness question → send straight to webhook ---
+    // --- NORMAL MODE: general question → webhook ---
     callWebhook(text.trim())
   }
 
-  // Current step's placeholder hint (used by ChatInput)
   const currentPlaceholder = assessmentMode
     ? ASSESSMENT_STEPS[assessmentStep]?.placeholder
     : undefined
 
-  // Landing page
   if (view === 'landing') {
     return <LandingPage onOpen={handleOpenChat} />
   }
 
-  // Chat interface with entrance animation
   return (
-    <div className={`flex flex-col h-full bg-dark-900 ${chatVisible ? 'animate-chat-open' : 'opacity-0'}`}>
-      <Header assessmentMode={assessmentMode} assessmentStep={assessmentStep} totalSteps={ASSESSMENT_STEPS.length} />
-      <div className="flex-1 flex flex-col items-center min-h-0 w-full">
-        <div className="flex flex-col flex-1 w-full max-w-2xl min-h-0">
+    <div
+      className={chatVisible ? 'animate-chat-open' : 'opacity-0'}
+      style={{ display: 'flex', flexDirection: 'column', height: '100%', background: 'var(--color-dark-900)' }}
+    >
+      <Header
+        assessmentMode={assessmentMode}
+        assessmentStep={assessmentStep}
+        totalSteps={ASSESSMENT_STEPS.length}
+      />
+
+      {/* Centred column — expands to fill remaining height */}
+      <div style={{ flex: '1 1 0%', display: 'flex', flexDirection: 'column', minHeight: 0, alignItems: 'center' }}>
+        <div className="chat-column">
           <ChatArea messages={messages} isTyping={isTyping} chatEndRef={chatEndRef} />
           <ChatInput
             onSend={handleSend}
