@@ -30,8 +30,14 @@
   .chat-area {
     flex: 1 1 0%;
     overflow-y: auto;
-    /* Comfortable breathing space on every screen */
-    padding: 20px 16px 8px;
+    /* Comfortable breathing space — bubbles never touch edges */
+    padding: 20px 12px 8px;
+  }
+
+  @media (min-width: 480px) {
+    .chat-area {
+      padding: 20px 16px 8px;
+    }
   }
 
   @media (min-width: 640px) {
@@ -210,22 +216,24 @@
   .chat-footer {
     flex-shrink: 0;
     border-top: 1px solid rgba(255, 255, 255, 0.06);
-    background: rgba(18, 18, 26, 0.85);
+    background: rgba(18, 18, 26, 0.92);
     backdrop-filter: blur(12px);
-    padding: 10px 16px 10px;
+    padding: 10px 16px;
+    /* Safe area for notched phones (iPhone home bar) */
+    padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px));
   }
 
   @media (min-width: 640px) {
-    .chat-footer { padding: 12px 24px 12px; }
+    .chat-footer { padding: 12px 24px; }
   }
 
   @media (min-width: 768px) {
-    .chat-footer { padding: 14px 28px 12px; }
+    .chat-footer { padding: 14px 28px 14px; }
   }
 
   .chat-footer__form {
     display: flex;
-    align-items: flex-end;
+    align-items: flex-end; /* send button aligns to bottom of growing textarea */
     gap: 10px;
   }
 
@@ -238,7 +246,7 @@
     background: var(--color-dark-700);
     padding: 11px 14px;
     min-height: 46px;
-    max-height: 128px;
+    max-height: 160px;
     overflow-y: auto;
     outline: none;
     transition: border-color 0.2s, box-shadow 0.2s;
@@ -246,6 +254,8 @@
     line-height: 1.5;
     /* prevent overflow on mobile */
     width: 0; /* flex handles actual width */
+    /* smooth height transitions for auto-grow */
+    height: auto;
   }
 
   .chat-footer__textarea--normal {

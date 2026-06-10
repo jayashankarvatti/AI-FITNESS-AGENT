@@ -2,7 +2,6 @@ import { useState, useRef, useEffect } from 'react'
 import Header from './components/Header'
 import ChatArea from './components/ChatArea'
 import ChatInput from './components/ChatInput'
-import LandingPage from './components/LandingPage'
 
 const WEBHOOK_URL = "https://hook.eu1.make.com/0dpy57gnnzcro9m0gk1r4b641jdc7w9y"
 
@@ -91,9 +90,6 @@ Please provide a comprehensive plan including workout routine, diet recommendati
 // App
 // ---------------------------------------------------------------------------
 export default function App() {
-  const [view, setView] = useState('landing') // 'landing' | 'chat'
-  const [chatVisible, setChatVisible] = useState(false)
-
   // Chat messages
   const [messages, setMessages] = useState([
     {
@@ -120,11 +116,6 @@ export default function App() {
   useEffect(() => {
     scrollToBottom()
   }, [messages, isTyping])
-
-  const handleOpenChat = () => {
-    setView('chat')
-    setTimeout(() => setChatVisible(true), 20)
-  }
 
   // Add an AI message to the chat
   const addAiMessage = (text) => {
@@ -153,19 +144,22 @@ export default function App() {
     }
   }
 
-  // Main send handler
+  // Main send handler — preserves line breaks from multi-line input
   const handleSend = async (text) => {
     if (!text.trim() || isTyping) return
 
+    // Trim leading/trailing whitespace but keep internal newlines intact
+    const cleanText = text.replace(/^\s+|\s+$/g, '')
+
     setMessages((prev) => [
       ...prev,
-      { id: Date.now(), text: text.trim(), sender: 'user', timestamp: new Date() },
+      { id: Date.now(), text: cleanText, sender: 'user', timestamp: new Date() },
     ])
 
     // --- ASSESSMENT MODE: collect answers step-by-step ---
     if (assessmentMode) {
       const currentStep = ASSESSMENT_STEPS[assessmentStep]
-      const updatedAnswers = { ...assessmentAnswers, [currentStep.key]: text.trim() }
+      const updatedAnswers = { ...assessmentAnswers, [currentStep.key]: cleanText }
       setAssessmentAnswers(updatedAnswers)
 
       const nextStep = assessmentStep + 1
@@ -192,8 +186,8 @@ export default function App() {
     }
 
     // --- NORMAL MODE: check if goal-oriented ---
-    if (isGoalRequest(text.trim())) {
-      setAssessmentGoal(text.trim())
+    if (isGoalRequest(cleanText)) {
+      setAssessmentGoal(cleanText)
       setAssessmentMode(true)
       setAssessmentStep(0)
       setAssessmentAnswers({})
@@ -207,20 +201,17 @@ export default function App() {
     }
 
     // --- NORMAL MODE: general question → webhook ---
-    callWebhook(text.trim())
+    callWebhook(cleanText)
   }
 
   const currentPlaceholder = assessmentMode
     ? ASSESSMENT_STEPS[assessmentStep]?.placeholder
     : undefined
 
-  if (view === 'landing') {
-    return <LandingPage onOpen={handleOpenChat} />
-  }
-
+  // Chat is shown immediately — no landing page
   return (
     <div
-      className={chatVisible ? 'animate-chat-open' : 'opacity-0'}
+      className="animate-chat-open"
       style={{ display: 'flex', flexDirection: 'column', height: '100%', background: 'var(--color-dark-900)' }}
     >
       <Header

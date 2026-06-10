@@ -11,18 +11,28 @@ export default function ChatInput({ onSend, isTyping, assessmentMode, placeholde
     }
   }, [assessmentMode, placeholder])
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
+  // Auto-resize textarea as content grows
+  useEffect(() => {
+    const el = textareaRef.current
+    if (!el) return
+    el.style.height = 'auto'
+    el.style.height = Math.min(el.scrollHeight, 160) + 'px'
+  }, [text])
+
+  const handleSendClick = () => {
     if (!text.trim() || isTyping) return
     onSend(text)
     setText('')
+    // Reset height
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto'
+    }
   }
 
+  // Enter = new line only (no submit on keypress)
   const handleKeyDown = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault()
-      handleSubmit(e)
-    }
+    // Intentionally do nothing on Enter — just let the browser insert a newline
+    // Only block Shift+Enter since it's redundant; plain Enter already creates a new line naturally
   }
 
   const inputPlaceholder = isTyping
@@ -50,9 +60,10 @@ export default function ChatInput({ onSend, isTyping, assessmentMode, placeholde
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="chat-footer__form" id="chat-form">
+      {/* Use div instead of form to prevent any accidental Enter-key submission */}
+      <div className="chat-footer__form" id="chat-form">
 
-        {/* Textarea */}
+        {/* Textarea — Enter creates new line, no keyboard-send */}
         <textarea
           ref={textareaRef}
           id="chat-input"
@@ -69,10 +80,11 @@ export default function ChatInput({ onSend, isTyping, assessmentMode, placeholde
           }`}
         />
 
-        {/* Send button */}
+        {/* Send button — only way to submit */}
         <button
-          type="submit"
+          type="button"
           id="send-button"
+          onClick={handleSendClick}
           disabled={!text.trim() || isTyping}
           aria-label="Send message"
           className={`chat-footer__send ${
@@ -88,7 +100,7 @@ export default function ChatInput({ onSend, isTyping, assessmentMode, placeholde
           </svg>
         </button>
 
-      </form>
+      </div>
 
       <p className="chat-footer__hint">
         FitAI may not always be accurate. Consult a professional for medical advice.
