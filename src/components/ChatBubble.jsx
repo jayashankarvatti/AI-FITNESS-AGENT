@@ -1,3 +1,27 @@
+// Render text with newline support and basic **bold** markdown
+function renderText(text) {
+  return text.split('\n').map((line, lineIdx, arr) => {
+    // Split on **bold** markers
+    const parts = line.split(/(\*\*[^*]+\*\*)/g)
+    const rendered = parts.map((part, i) => {
+      if (part.startsWith('**') && part.endsWith('**')) {
+        return <strong key={i}>{part.slice(2, -2)}</strong>
+      }
+      // Replace *italic* single-star markers used as bullet hints
+      if (part.startsWith('*(') || part.startsWith('* ')) {
+        return <span key={i} style={{ color: 'rgba(252,211,77,0.75)', fontSize: '0.8em' }}>{part}</span>
+      }
+      return part
+    })
+    return (
+      <span key={lineIdx}>
+        {rendered}
+        {lineIdx < arr.length - 1 && <br />}
+      </span>
+    )
+  })
+}
+
 export default function ChatBubble({ message }) {
   const isUser = message.sender === 'user'
 
@@ -27,7 +51,7 @@ export default function ChatBubble({ message }) {
       {/* Bubble + timestamp column */}
       <div className="msg-col">
         <div className={`msg-bubble ${isUser ? 'msg-bubble--user' : 'msg-bubble--ai'}`}>
-          {message.text}
+          {renderText(message.text)}
         </div>
         <p className={`msg-time ${isUser ? 'msg-time--user' : 'msg-time--ai'}`}>
           {time}

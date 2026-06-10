@@ -30,40 +30,40 @@ function isGoalRequest(text) {
 const ASSESSMENT_STEPS = [
   {
     key: 'gender',
-    question: '👤 What is your gender? *(Male / Female / Other)*',
+    question: 'Great! Before I create a personalized plan, please tell me your **gender**. *(Male / Female / Other)*',
     placeholder: 'e.g. Male, Female, Other…',
   },
   {
     key: 'age',
-    question: '🎂 How old are you?',
+    question: 'What is your **age**?',
     placeholder: 'e.g. 25',
   },
   {
     key: 'height',
-    question: '📏 What is your height? *(e.g. 5\'10" or 178 cm)*',
+    question: 'What is your **height**? *(e.g. 5\'10" or 178 cm)*',
     placeholder: 'e.g. 5\'10" or 178 cm',
   },
   {
     key: 'weight',
-    question: '⚖️ What is your current weight? *(e.g. 75 kg or 165 lbs)*',
+    question: 'What is your current **weight**? *(e.g. 75 kg or 165 lbs)*',
     placeholder: 'e.g. 75 kg or 165 lbs',
   },
   {
     key: 'activityLevel',
     question:
-      '🏃 How active are you currently?\n\n• Sedentary – little or no exercise\n• Lightly Active – light exercise 1–3 days/week\n• Moderately Active – moderate exercise 3–5 days/week\n• Very Active – hard exercise 6–7 days/week\n• Extremely Active – very hard exercise & physical job',
+      'What is your current **activity level**?\n\n• Sedentary – little or no exercise\n• Lightly Active – light exercise 1–3 days/week\n• Moderately Active – moderate exercise 3–5 days/week\n• Very Active – hard exercise 6–7 days/week\n• Extremely Active – very hard exercise & physical job',
     placeholder: 'e.g. Sedentary, Lightly Active, Moderately Active…',
   },
   {
     key: 'fitnessExperience',
     question:
-      '💪 What is your fitness experience level?\n\n• Beginner – just starting out\n• Intermediate – training for 6+ months\n• Advanced – training for 2+ years',
+      'What is your **fitness experience** level?\n\n• Beginner – just starting out\n• Intermediate – training for 6+ months\n• Advanced – training for 2+ years',
     placeholder: 'e.g. Beginner, Intermediate, Advanced',
   },
   {
     key: 'dietaryPreference',
     question:
-      '🥗 What is your dietary preference?\n\n• Vegetarian\n• Non-Vegetarian\n• Vegan\n• Eggetarian\n• No preference',
+      'What is your **dietary preference**?\n\n• Vegetarian\n• Non-Vegetarian\n• Vegan\n• Eggetarian\n• No preference',
     placeholder: 'e.g. Vegetarian, Non-Vegetarian, Vegan…',
   },
 ]
@@ -192,10 +192,9 @@ export default function App() {
       setAssessmentStep(0)
       setAssessmentAnswers({})
 
+      // Show the first question directly — conversational, one at a time
       setTimeout(() => {
-        addAiMessage(
-          `🎯 Great goal! To build a personalized plan just for you, I need to ask a few quick questions.\n\nLet's start — ${ASSESSMENT_STEPS[0].question}`
-        )
+        addAiMessage(ASSESSMENT_STEPS[0].question)
       }, 400)
       return
     }
