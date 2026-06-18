@@ -1,6 +1,7 @@
 # 🏋️ FitAI – Personalized AI Fitness Assistant
 
 FitAI is an AI-powered fitness assistant that provides personalized workout, nutrition, and lifestyle recommendations through an interactive chatbot. Unlike traditional fitness applications that offer generic advice, FitAI first collects essential user information and then generates customized guidance based on the individual's profile and fitness goals.
+### Live link:  https://fitaiagent.netlify.app
 
 ## 🚀 Project Overview
 
